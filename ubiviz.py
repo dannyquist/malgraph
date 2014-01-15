@@ -42,10 +42,10 @@ def displayGraph(gmlfile):
     
     for n in g.nodes.keys():
         v = g.nodes[n]
-        G.new_vertex_w_id(v.id)
-        G.set_vertex_attribute(v.id, 'color', "#" + v.color)
+        G.new_vertex_w_id(v.nodeId)
+        G.set_vertex_attribute(v.nodeId, 'color', "#" + v.color)
         if "deadbeef" in v.label:
-            G.set_vertex_attribute(v.id, 'label', 'START')
+            G.set_vertex_attribute(v.nodeId, 'label', 'START')
 
     for e in g.edges:
         #G.new_vertex_w_id(e.srcid)

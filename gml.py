@@ -1,5 +1,6 @@
 """Library to parse the OGDF GML file format."""
 # GML Parsing library for the ubigraph trace generation
+#
 # Written by Danny Quist, Open Malware
 # Copyright (C) 2013 Danny Quist
 #
@@ -17,7 +18,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-import re, sys
+import re
 
 nodeStartre = re.compile("node \[")
 edgeStartre = re.compile("edge \[")
@@ -30,11 +31,11 @@ labelre = re.compile("label \"<label.*>([0-9a-fA-F]+)</label>")
 fillre = re.compile("fill \"#([a-fA-F0-9]+)\"")
 
 class Node:
-    def __init__(self, id=None, label=None, color=None, coords=(0,0,0)):
+    def __init__(self, nodeId=None, label=None, color=None, coords=(0,0,0)):
         self.x = coords[0]
         self.y = coords[1]
         self.z = coords[2]
-        self.id = int(id)
+        self.nodeId = int(nodeId)
         self.label = label
         self.color = color
 
@@ -67,14 +68,14 @@ class Graph:
         inGraphics = False
         inEdge = False
 
-        id = None
+        nodeId = None
         label = None
         fill = None
 
         src = None
         dst = None
 
-        while (l):
+        while l:
             if nodeStartre.match(l):
                 inNode = True
             elif edgeStartre.match(l):
@@ -87,16 +88,16 @@ class Graph:
                 endblockm = endBlockre.match(l)
 
                 if idm:
-                    id = idm.group(1)
+                    nodeId = idm.group(1)
                 elif labelm:
                     label = labelm.group(1)
                 elif graphicsm:
                     inGraphics = True
                 elif endblockm:
                     inNode = False
-                    self.nodes[int(id)] = Node(id=id, label=label, color=fill)
+                    self.nodes[int(nodeId)] = Node(nodeId=nodeId, label=label, color=fill)
                     #self.nodes.append( Node(id=id, label=label, color=fill) )
-                    id = label = fill = None
+                    nodeId = label = fill = None
 
             elif inNode and inGraphics:
 
@@ -137,4 +138,4 @@ class Graph:
 
         fin.close()
 
-        
+
